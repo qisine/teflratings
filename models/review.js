@@ -9,7 +9,7 @@ var reviewSchema = new Schema({
   cons: String,
   jobStatus: String,
   jobCity: String,
-  lengthOfEmployment: String,
+  lengthOfEmployment: Number,
 });
 
 module.exports = mongoose.model('Review', reviewSchema);

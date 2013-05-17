@@ -1,11 +1,16 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    Review = require('./review');
 
 var schoolSchema = new Schema({
   englishName: String,
   officialName: String,
   companyNumber: String,
-  address: Schema.Types.ObjectId,
+  street: String,
+  city: String,
+  zip: String,
+  country: String,
+  reviews: [Review.schema],
   description: String,
 });
 
