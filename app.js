@@ -26,6 +26,10 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/schools', routes.schools.list);
+app.get('/schools/:id(\\d+)', routes.schools.show);
+app.post('/schools', routes.schools.create);
+app.put('/schools/:id(\\d+)', routes.schools.update);
+app.delete('/schools/:id(\\d+)', routes.schools.destroy);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
