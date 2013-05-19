@@ -1,7 +1,7 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , everyauth = require('everyauth')
+  , everyauth = require('./auth')
   , routes = require('./routes')
   , models = require('./models') ;
 
