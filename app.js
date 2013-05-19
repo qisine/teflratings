@@ -1,8 +1,9 @@
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
   , path = require('path')
-  , models = require('./models');
+  , everyauth = require('everyauth')
+  , routes = require('./routes')
+  , models = require('./models') ;
 
 var app = express();
 
@@ -13,10 +14,11 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('JOaeu5y)P(%7oWV*04w0V$.be.,aW0:v>hw4uOao'));
 app.use(express.session());
+app.use(everyauth.middleware());
 app.use(app.router);
-  app.use(require('less-middleware')({ src: __dirname + '/public' }));
+app.use(require('less-middleware')({ src: __dirname + '/public' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
