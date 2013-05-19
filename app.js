@@ -24,7 +24,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.use(function(err, req, res, next) {
+  var e = err || "An error occurred! :(";
+  res.send({ error: e.toString() });
+});
+
 app.get('/schools', routes.schools.list);
 app.get('/schools/:id(\\d+)', routes.schools.show);
 app.post('/schools', routes.schools.create);
