@@ -79,16 +79,18 @@ everyauth.everymodule.findUserById(function(userId, cb) {
 auth.everyauth = everyauth;
 
 auth.authenticate = function(req, res, next) {
-  if(!req.user) next(new Error("Must login to access this resouce"));
+  if(!req.user) res.send(401, { error: "Must login to access this resouce"});
   else next();
 }
 
 auth.authorize = function(resource) {
   return function(req, res, next) {
+    console.log('params->', req.params);
     resource.findById(req.params.id, function(err, resourceInst) {
+      console.log('ri.user [%s], req.usr.id [%s]', resourceInst.user, req.user.id);
       if(err) next(err);
-      else if(!req.user) next(new Error("Must login to access this resouce"));
-      else if(resourceInst.user !== req.user.id) next(Error("Not authorized to access this resource"));
+      else if(!req.user) res.send(401, { error: "Must login to access this resource" });
+      else if(!resourceInst.user.equals(req.user.id)) res.send(401, { error: "Not authorized to access this resource"});
       else next();
     });
   }
