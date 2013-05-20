@@ -41,6 +41,7 @@ module.exports.create = function(req, res, next) {
 
 module.exports.update = function(req, res, next) {
   var id = ObjectId(req.params.id);
+  delete req.body.reviews;
   School.findOneAndUpdate({_id: id}, req.body, function(err, school) {
     if(err) {
       next(err);
