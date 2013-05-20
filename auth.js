@@ -87,8 +87,9 @@ auth.authorize = function(resource) {
   return function(req, res, next) {
     console.log('params->', req.params);
     resource.findById(req.params.id, function(err, resourceInst) {
-      console.log('ri.user [%s], req.usr.id [%s]', resourceInst.user, req.user.id);
+      console.log('ri.user [%s], req.usr.id [%s]', resourceInst && resourceInst.user, req && req.user && req.user.id);
       if(err) next(err);
+      else if(!resourceInst) res.send(404, { error: "Resource not found! :(" });
       else if(!req.user) res.send(401, { error: "Must login to access this resource" });
       else if(!resourceInst.user.equals(req.user.id)) res.send(401, { error: "Not authorized to access this resource"});
       else next();
