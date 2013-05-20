@@ -20,15 +20,15 @@ everyauth
     promise = this.Promise();
     User.findOne({email: email}, function(err, user) {
       if(err)
-        return promise.fail([err.message || err]);
+        return promise.fail(new Error(err));
       else if(!user)
-        return promise.fail(["User with email [" + email + "] doesn't exist"]);
+        return promise.fail(new Error("User with email [" + email + "] doesn't exist"));
 
       bcrypt.compare(password, user.hash, function(err, success) {
         if(err)
-          return promise.fail([err]);
+          return promise.fail(new Error(err));
         else if(!success)
-          return promise.fail(["Passwords do not match"]);  
+          return promise.fail(new Error("Passwords do not match"));  
 
         return promise.fulfill(user);
       }); 
@@ -49,7 +49,7 @@ everyauth
     newUserAttrs.hash = bcrypt.hashSync(passwd, salt);
 
     User.create(newUserAttrs, function(err, user) {
-      if(err) return promise.fail(err);
+      if(err) return promise.fail(new Error(err));
       return promise.fulfill(user);
     });
 
