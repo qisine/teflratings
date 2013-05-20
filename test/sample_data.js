@@ -17,7 +17,8 @@ async.waterfall([
     for(var i=0;i < 10; i++) users.push(createUser());
     models.User.create(users, function(err) {
       if(err) throw new Error(err);
-      else cb(null, utils.getArgs(arguments));
+      console.log('users created');
+      cb(null, utils.getArgs(arguments));
     });
   },
   function(users, cb) {
@@ -25,7 +26,8 @@ async.waterfall([
     for(var i=0;i < 20; i++) schools.push(createSchool(faker.random.array_element(users))); 
     models.School.create(schools, function(err) {
       if(err) throw new Error(err);
-      else cb(null, users, utils.getArgs(arguments));
+      console.log('schools created');
+      cb(null, users, utils.getArgs(arguments));
     });
   },
   function(users, schools, cb) {
@@ -37,7 +39,8 @@ async.waterfall([
     });
     models.Review.create(reviews, function(err) {
       if(err) throw new Error(err);
-      else cb(null, users, schools, utils.getArgs(arguments));
+      console.log('reviews created');
+      cb(null, users, schools, utils.getArgs(arguments));
     });
   },
   function(users, schools, reviews, cb) {
@@ -65,10 +68,8 @@ async.waterfall([
         models.User.update(u, { $pushAll: { schools: ids } }, function(err) {
           if(err) throw new Error(err);
           models.Review.find({user: u.id}, function(err, reviews) {
-            console.log('user [%s], reviews [%s]', u.id, reviews.length);
             var ids = reviews.map(function(r) { return r.id });
             models.User.update({_id: u.id}, { $pushAll: { reviews: ids } }, function(err) {
-              console.log('user.reviews.length [%s]', u.reviews.length);
               if(err) throw new Error(err);
               cb2();
             });
@@ -81,4 +82,5 @@ async.waterfall([
     });
   },
 ], function(err, result) {
+  console.log('Successfully created test data');
 });
