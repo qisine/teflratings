@@ -1,7 +1,8 @@
 var db = require('../db'),
     ObjectId = db.Types.ObjectId,
     models = require('../models');
-var School = models.School;
+var   School = models.School
+    , Review = models.Review;
 
 module.exports.list = function(req, res, next){
   School.find(function(err, schools) {
@@ -27,8 +28,9 @@ module.exports.show = function(req, res, next) {
 }
 
 module.exports.create = function(req, res, next) {
-  console.log('usr->', req.user);
-  School.create(req.body, function(err, school) {
+  var school = new School(req.body);
+  school.user = req.user.id;
+  School.create(school, function(err, school) {
     if(err) {
       next(err);
     } else { 
@@ -54,6 +56,7 @@ module.exports.destroy = function(req, res, next) {
     if(err) {
       next(err);
     } else { 
+      Review.remove({school: school.id}).exec();
       res.send(school);
     }
   });
