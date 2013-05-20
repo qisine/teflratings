@@ -39,6 +39,18 @@ everyauth
   .getRegisterPath('/register')
   .postRegisterPath('/register')
   .validateRegistration(function(newUserAttrs) {
+    var promise = this.Promise()
+        , email = newUserAttrs.email;
+    User.findOne({ email: email }, function(err, user) {
+      if(err)
+        return promise.fail(new Error(err));
+      else if(user)
+        return promise.fail(new Error("Email already registered"));
+      else
+        return promise.fulfill(user);
+    });
+
+    return promise;
   })
   .registerUser(function(newUserAttrs) {
     var promise = this.Promise(),
