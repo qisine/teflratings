@@ -38,7 +38,7 @@ module.exports.create = function(req, res, next) {
 }
 
 module.exports.update = function(req, res, next) {
-  var id = ObjectId(req.body.id);
+  var id = ObjectId(req.params.id);
   School.findOneAndUpdate({_id: id}, req.body, function(err, school) {
     if(err) {
       next(err);
@@ -49,7 +49,7 @@ module.exports.update = function(req, res, next) {
 }
 
 module.exports.destroy = function(req, res, next) {
-  var id = ObjectId(req.body.id);
+  var id = ObjectId(req.params.id);
   School.findOneAndRemove({_id: id}, function(err, school) {
     if(err) {
       next(err);

@@ -85,9 +85,10 @@ auth.authenticate = function(req, res, next) {
 
 auth.authorize = function(resource) {
   return function(req, res, next) {
-    resource.findById(req.body.id, function(err, resourceInst) {
-      if(!req.user) next(new Error("Must login to access this resouce"));
-      else if(resourceInst.userId !== req.user.id) next(Error("Not authorized to access this resource"));
+    resource.findById(req.params.id, function(err, resourceInst) {
+      if(err) next(err);
+      else if(!req.user) next(new Error("Must login to access this resouce"));
+      else if(resourceInst.user !== req.user.id) next(Error("Not authorized to access this resource"));
       else next();
     });
   }
