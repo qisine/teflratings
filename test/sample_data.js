@@ -1,5 +1,6 @@
 var faker = require('Faker'),
     async = require('async'),
+    utils = require('../utils'),
     models = require('../models'),
     db = require('../db');
 var createSchool = require('./factories/schools.js')
@@ -13,18 +14,18 @@ var createSchool = require('./factories/schools.js')
 async.waterfall([
   function(cb) {
     var users = [];
-    for(var i=0;i < 37; i++) users.push(createUser());
+    for(var i=0;i < 10; i++) users.push(createUser());
     models.User.create(users, function(err) {
       if(err) throw new Error(err);
-      else cb(null, Array.prototype.slice.call(arguments, 1));
+      else cb(null, utils.getArgs(arguments));
     });
   },
   function(users, cb) {
     var schools = [];
-    for(var i=0;i < 29; i++) schools.push(createSchool(faker.random.array_element(users))); 
+    for(var i=0;i < 20; i++) schools.push(createSchool(faker.random.array_element(users))); 
     models.School.create(schools, function(err) {
       if(err) throw new Error(err);
-      else cb(null, users, Array.prototype.slice.call(arguments, 1));
+      else cb(null, users, utils.getArgs(arguments));
     });
   },
   function(users, schools, cb) {
@@ -36,11 +37,48 @@ async.waterfall([
     });
     models.Review.create(reviews, function(err) {
       if(err) throw new Error(err);
-      else cb(null, users, schools, Array.prototype.slice.call(arguments, 1));
+      else cb(null, users, schools, utils.getArgs(arguments));
     });
   },
   function(users, schools, reviews, cb) {
+    async.each(schools, function(s, cb2) {
+      models.Review.find({school: s.id}, function(err, reviews) {
+        if(err) throw new Error(err);
+        
+        var ids = reviews.map(function(r) { return r.id });
+        models.School.update(s, { $pushAll: { reviews: ids } }, function(err) {
+          if(err) throw new Error(err);
+          cb2();
+        });
+      });
+    }, function(err) {
+        if(err) throw new Error(err);
+        cb(null, users, schools, reviews);
+    });
   },
-],
-  function(err, result) {
-  });
+  function(users, schools, reviews, cb) {
+    async.each(users, function(u, cb2) {
+      models.School.find({user: u.id}, function(err, schools) {
+        if(err) throw new Error(err);
+
+        var ids = schools.map(function(r) { return r.id });
+        models.User.update(u, { $pushAll: { schools: ids } }, function(err) {
+          if(err) throw new Error(err);
+          models.Review.find({user: u.id}, function(err, reviews) {
+            console.log('user [%s], reviews [%s]', u.id, reviews.length);
+            var ids = reviews.map(function(r) { return r.id });
+            models.User.update({_id: u.id}, { $pushAll: { reviews: ids } }, function(err) {
+              console.log('user.reviews.length [%s]', u.reviews.length);
+              if(err) throw new Error(err);
+              cb2();
+            });
+          });
+        });
+      });
+    }, function(err) {
+        if(err) throw new Error(err);
+        cb(null);
+    });
+  },
+], function(err, result) {
+});
