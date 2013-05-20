@@ -70,4 +70,8 @@ everyauth
   })
   .registerSuccessRedirect('/');
 
+everyauth.everymodule.findUserById(function(userId, cb) {
+  User.findById(userId, cb);
+});
+
 module.exports = everyauth;
