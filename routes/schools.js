@@ -27,7 +27,8 @@ module.exports.show = function(req, res, next) {
 }
 
 module.exports.create = function(req, res, next) {
-  School.create(req.params, function(err, school) {
+  console.log('usr->', req.user);
+  School.create(req.body, function(err, school) {
     if(err) {
       next(err);
     } else { 
@@ -37,8 +38,8 @@ module.exports.create = function(req, res, next) {
 }
 
 module.exports.update = function(req, res, next) {
-  var id = ObjectId(req.params.id);
-  School.findOneAndUpdate({_id: id}, req.params, function(err, school) {
+  var id = ObjectId(req.body.id);
+  School.findOneAndUpdate({_id: id}, req.body, function(err, school) {
     if(err) {
       next(err);
     } else { 
@@ -48,7 +49,7 @@ module.exports.update = function(req, res, next) {
 }
 
 module.exports.destroy = function(req, res, next) {
-  var id = ObjectId(req.params.id);
+  var id = ObjectId(req.body.id);
   School.findOneAndRemove({_id: id}, function(err, school) {
     if(err) {
       next(err);
