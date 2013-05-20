@@ -9,6 +9,14 @@ var userSchema = new Schema({
   name: String,
   hash: String,
   salt: String,
+  schools: [{
+    type: Schema.ObjectId,
+    ref: 'School'
+  }],
+  reviews: [{
+    type: Schema.ObjectId,
+    ref: 'Review'
+  }],
 });
 
 module.exports = mongoose.model('User', userSchema);

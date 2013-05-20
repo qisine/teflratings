@@ -10,8 +10,15 @@ var schoolSchema = new Schema({
   city: String,
   zip: String,
   country: String,
-  reviews: [Review.schema],
   description: String,
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  reviews: [{
+    type: Schema.ObjectId,
+    ref: 'Review'
+  }],
 });
 
 module.exports = mongoose.model('School', schoolSchema);

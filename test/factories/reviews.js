@@ -2,9 +2,9 @@ var faker = require('Faker'),
     db = require('../../db'),
     Review = require('../../models').Review;
 
-function createReview() {
+function createReview(user) {
   var r = new Review();
-  r.userName = faker.Name.findName();
+  if(user) r.user = user.id;
   r.rating = faker.random.number(5);
   r.pros = faker.Lorem.paragraph();
   r.cons = faker.Lorem.paragraph();
