@@ -1,7 +1,9 @@
 var everyauth = require('everyauth')
     , bcrypt = require('bcrypt')
     , mongoose = require('./db')
-    , User = require('./models').User;
+    , models = require('./models')
+    , auth = {};
+var User = models.User;
 
 everyauth
   .password
@@ -74,4 +76,25 @@ everyauth.everymodule.findUserById(function(userId, cb) {
   User.findById(userId, cb);
 });
 
-module.exports = everyauth;
+auth.everyauth = everyauth;
+
+auth.authenticate = function(req, res, next) {
+  if(!req.user) next(new Error("Must login to access this resouce"));
+  else next();
+}
+
+auth.authorize = function(resource) {
+  return function(req, res, next) {
+    resource.findById(req.body.id, function(err, resourceInst) {
+      if(!req.user) next(new Error("Must login to access this resouce"));
+      else if(resourceInst.userId !== req.user.id) next(Error("Not authorized to access this resource"));
+      else next();
+    });
+  }
+}
+
+auth.authenticateAndAuthorize = function(resource) {
+  return [auth.authenticate, auth.authorize(models[resource])];
+}
+
+module.exports = auth;
