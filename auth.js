@@ -6,9 +6,9 @@ var everyauth = require('everyauth')
 everyauth
   .password
   .loginWith('email')
-  .getLoginPath('/signin')
-  .postLoginPath('/signin')
-  .loginView('<div></div>')
+  .getLoginPath('/login')
+  .postLoginPath('/login')
+  //.loginView('<div></div>')
   .authenticate(function(email, password) {
     var promise
       , errors = [];
@@ -38,6 +38,7 @@ everyauth
   .loginSuccessRedirect('/')
   .getRegisterPath('/register')
   .postRegisterPath('/register')
+  //.registerView('<div></div>')
   .validateRegistration(function(newUserAttrs) {
     var promise = this.Promise()
         , email = newUserAttrs.email;
@@ -58,7 +59,7 @@ everyauth
 
     delete newUserAttrs.password;
     newUserAttrs.salt = bcrypt.genSaltSync(10);
-    newUserAttrs.hash = bcrypt.hashSync(passwd, salt);
+    newUserAttrs.hash = bcrypt.hashSync(passwd, newUserAttrs.salt);
 
     User.create(newUserAttrs, function(err, user) {
       if(err) return promise.fail(new Error(err));
