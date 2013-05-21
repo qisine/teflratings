@@ -1,6 +1,6 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    Review = require('./review');
+var   mongoose = require('mongoose')
+    , Schema = mongoose.Schema
+    , ext = require('./ext');
 
 var schoolSchema = new Schema({
   englishName: String,
@@ -20,5 +20,7 @@ var schoolSchema = new Schema({
     ref: 'Review'
   }],
 });
+
+schoolSchema.plugin(ext.parentSync("User"));
 
 module.exports = mongoose.model('School', schoolSchema);

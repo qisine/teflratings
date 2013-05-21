@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var   mongoose = require('mongoose')
+    , ext = require('./ext')
+    , Schema = mongoose.Schema;
 
 var reviewSchema = new Schema({
   user: {
@@ -17,5 +18,8 @@ var reviewSchema = new Schema({
   jobCity: String,
   lengthOfEmployment: Number,
 });
+
+reviewSchema.plugin(ext.parentSync("School"));
+reviewSchema.plugin(ext.parentSync("User"));
 
 module.exports = mongoose.model('Review', reviewSchema);

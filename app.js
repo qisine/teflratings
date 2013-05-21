@@ -32,11 +32,18 @@ app.use(function(err, req, res, next) {
 });
 
 app.get('/', routes.schools.list);
+
 app.get('/schools', routes.schools.list);
 app.get('/schools/:id', routes.schools.show);
 app.post('/schools', auth.authenticate, routes.schools.create);
 app.put('/schools/:id', auth.authenticateAndAuthorize('School'), routes.schools.update);
 app.delete('/schools/:id', auth.authenticateAndAuthorize('School'), routes.schools.destroy);
+
+app.get('/reviews', routes.reviews.list);
+app.get('/reviews/:id', routes.reviews.show);
+app.post('/reviews', auth.authenticate, routes.reviews.create);
+app.put('/reviews/:id', auth.authenticateAndAuthorize('review'), routes.reviews.update);
+app.delete('/reviews/:id', auth.authenticateAndAuthorize('review'), routes.reviews.destroy);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
