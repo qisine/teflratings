@@ -34,6 +34,7 @@ app.use(function(err, req, res, next) {
 app.get('/', routes.schools.list);
 
 app.get('/schools', routes.schools.list);
+app.get('/schools/search', routes.schools.search);
 app.get('/schools/:id', routes.schools.show);
 app.post('/schools', auth.authenticate, routes.schools.create);
 app.put('/schools/:id', auth.authenticateAndAuthorize('School'), routes.schools.update);

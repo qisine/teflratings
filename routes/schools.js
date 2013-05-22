@@ -2,7 +2,8 @@ var   db = require('../db')
     , ObjectId = db.Types.ObjectId
     , models = require('../models');
 var   School = models.School
-    , Review = models.Review;
+    , Review = models.Review
+    , SchoolSearch = models.SchoolSearch;
 
 module.exports.list = function(req, res, next){
   School.find(function(err, schools) {
@@ -17,6 +18,14 @@ module.exports.show = function(req, res, next) {
     if(err) next(err);
     else if (!school) res.send(404, {error: "Record not found! :(" });
     else res.send(school);
+  });
+}
+
+module.exports.search = function(req, res, next) {
+  var schoolSearch = new SchoolSearch(req.query);
+  schoolSearch.find(function(err, schools) {
+    if(err) next(err);
+    else res.send(schools);
   });
 }
 
