@@ -10,20 +10,19 @@ var updateParent = function(targetModel, method, cb) {
 
 var addToParent = function(targetModel) {
   return function(cb) {
-    return updateParent(targetModel, "$push", cb);
+    updateParent.call(this, targetModel, "$push", cb);
   }
 }
 
 var removeFromParent = function(targetModel) {
   return function(cb) {
-    updateParent(targetModel, "$pull", cb);
+    updateParent.call(this, targetModel, "$pull", cb);
   }
 }
 
 module.exports.parentSync = function(targetModel) {
-  targetModel = targetModel || "Parent";
   return function(schema) {
-    schema.methods["addTo" + targetModel] = addToParent(targetModel);
-    schema.methods["removeFrom" + targetModel] = removeFromParent(targetModel);
+    schema.methods["addTo" + targetModel.modelName] = addToParent(targetModel);
+    schema.methods["removeFrom" + targetModel.modelName] = removeFromParent(targetModel);
   }
 }

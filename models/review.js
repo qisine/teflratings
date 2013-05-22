@@ -1,6 +1,9 @@
 var   mongoose = require('mongoose')
-    , ext = require('./ext')
-    , Schema = mongoose.Schema;
+    , Schema = mongoose.Schema
+    , ext = require("./ext")
+    , User = require('./user')
+    , School = require('./school')
+    , Review;
 
 var reviewSchema = new Schema({
   user: {
@@ -19,7 +22,7 @@ var reviewSchema = new Schema({
   lengthOfEmployment: Number,
 });
 
-reviewSchema.plugin(ext.parentSync("School"));
-reviewSchema.plugin(ext.parentSync("User"));
+reviewSchema.plugin(ext.parentSync(School));
+reviewSchema.plugin(ext.parentSync(User));
 
 module.exports = mongoose.model('Review', reviewSchema);

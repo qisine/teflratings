@@ -1,6 +1,7 @@
 var   mongoose = require('mongoose')
     , Schema = mongoose.Schema
-    , ext = require('./ext');
+    , ext = require("./ext")
+    , User = require('./user');
 
 var schoolSchema = new Schema({
   englishName: String,
@@ -21,6 +22,6 @@ var schoolSchema = new Schema({
   }],
 });
 
-schoolSchema.plugin(ext.parentSync("User"));
+schoolSchema.plugin(ext.parentSync(User));
 
 module.exports = mongoose.model('School', schoolSchema);
