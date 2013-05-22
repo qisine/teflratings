@@ -42,8 +42,8 @@ app.delete('/schools/:id', auth.authenticateAndAuthorize('School'), routes.schoo
 app.get('/reviews', routes.reviews.list);
 app.get('/reviews/:id', routes.reviews.show);
 app.post('/reviews', auth.authenticate, routes.reviews.create);
-app.put('/reviews/:id', auth.authenticateAndAuthorize('review'), routes.reviews.update);
-app.delete('/reviews/:id', auth.authenticateAndAuthorize('review'), routes.reviews.destroy);
+app.put('/reviews/:id', auth.authenticateAndAuthorize('Review'), routes.reviews.update);
+app.delete('/reviews/:id', auth.authenticateAndAuthorize('Review'), routes.reviews.destroy);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
